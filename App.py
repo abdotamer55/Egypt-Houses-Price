@@ -28,5 +28,5 @@ def load_readme(path):
 readme_content = load_readme(README_PATH)
 st.markdown(readme_content, unsafe_allow_html=True)
 
-# Sidebar navigation tip
+# Sidebar navigation tip - Streamlit automatically builds the sidebar using the 'pages' folder
 st.sidebar.success("Main")

@@ -4,14 +4,15 @@ import streamlit as st
 from src.Predection import pipeline_predict
 
 # ── DYNAMIC PATH INJECTION FOR MULTI-PAGE STRUCTURE ────────────────────
-# Identify the absolute path of the current file's directory (src/pages)
+# CURRENT_DIR resolves to the absolute path of the 'pages' directory
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-# Step back one directory to locate the core 'src' folder
-PARENT_DIR = os.path.dirname(CURRENT_DIR)
+# BASE_DIR resolves to the root project folder (Egypt-Houses-Price)
+BASE_DIR = os.path.dirname(CURRENT_DIR)
 
-# Append the parent 'src' directory to python path to avoid ModuleNotFoundError
-if PARENT_DIR not in sys.path:
-    sys.path.append(PARENT_DIR)
+# Append the neighboring 'src' directory to python path environment safely
+SRC_DIR = os.path.join(BASE_DIR, "src")
+if SRC_DIR not in sys.path:
+    sys.path.append(SRC_DIR)
 
 # ── PAGE CONFIGURATION ──────────────────────────────────────────────────
 st.set_page_config(
