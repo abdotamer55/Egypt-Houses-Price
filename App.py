@@ -1,7 +1,7 @@
 import os
 import sys
 import streamlit as st
-from src.Predection import pipeline_predict
+
 # ── DYNAMIC PATH INJECTION FOR THE INFERENCE PIPELINE ──────────────────
 # Identify the absolute path of the root directory (Egypt-Houses-Price)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -11,6 +11,8 @@ SRC_DIR = os.path.join(BASE_DIR, "src")
 if SRC_DIR not in sys.path:
     sys.path.append(SRC_DIR)
 
+# FIX: Import directly from Predection without the "src." prefix
+from Predection import pipeline_predict
 
 # ── GLOBAL PAGE CONFIGURATION ──────────────────────────────────────────
 st.set_page_config(
