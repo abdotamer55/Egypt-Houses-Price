@@ -1,9 +1,21 @@
 import os
+import sys
 import joblib
 import numpy as np
 import pandas as pd
 
+# ── FORCE LINUX EXECUTION ENVIRONMENT TO RECOGNIZE NEIGHBORING FILES ──
+# Get the absolute path of the directory where Predection.py lives (src/)
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Add the 'src' directory itself directly to the system paths
+if CURRENT_DIR not in sys.path:
+    sys.path.append(CURRENT_DIR)
+
+# Import neighboring modules directly so joblib/pickle can find them during load
+import Featuer_engineering
+import Featuer_selection
+
 BASE_DIR = os.path.dirname(CURRENT_DIR)  # Project root directory
 MODELS_DIR = os.path.join(BASE_DIR, "models")  # Path to your 'models' folder
 
