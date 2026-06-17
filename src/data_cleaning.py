@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,7 +18,17 @@ import joblib
 sns.set_theme(style="whitegrid")
 plt.rcParams['figure.figsize'] = [10, 6]
 
-df = pd.read_csv(r"D:\Local\Mix\Project\Egypt-Houses-Price\data\Egypt_Houses_Price.csv")
+# ── DYNAMIC PATH RESOLUTION FOR SERVER COMPATIBILITY ──────────────────
+# Get the directory where data_cleaning.py lives (src/)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Get the root directory of the project (Egypt-Houses-Price)
+BASE_DIR = os.path.dirname(CURRENT_DIR)
+
+# Construct the relative cloud-safe path to the data folder
+CSV_PATH = os.path.join(BASE_DIR, "data", "Egypt_Houses_Price.csv")
+
+# Load the dataframe using the safe path
+df = pd.read_csv(CSV_PATH)
 
 def basic_cleaning(dataframe):
     # 1. Remove duplicate rows
