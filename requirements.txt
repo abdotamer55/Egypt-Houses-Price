@@ -3,6 +3,9 @@ joblib
 pandas
 numpy
 scikit-learn
+category_encoders
 matplotlib
 seaborn
 lightgbm
+xgboost
+tensorflow
