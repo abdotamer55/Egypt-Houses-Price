@@ -14,7 +14,7 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 import lightgbm as lgb
 import xgboost as xgb
 import joblib
-from Featuer_selection import (
+from Feature_selection import (
     X_train_final, X_test_final, y_log_train, y_log_test, y_test_raw, 
     selected_features, global_mean_log, X_train, CATEGORICAL_TE_COLS
 )
