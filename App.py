@@ -11,8 +11,8 @@ SRC_DIR = os.path.join(BASE_DIR, "src")
 if SRC_DIR not in sys.path:
     sys.path.append(SRC_DIR)
 
-# FIX: Import directly from Predection without the "src." prefix
-from Predection import pipeline_predict
+# FIX: Import directly from Prediction without the "src." prefix
+from Prediction import pipeline_predict
 
 # ── GLOBAL PAGE CONFIGURATION ──────────────────────────────────────────
 st.set_page_config(
@@ -121,7 +121,7 @@ with tab2:
         
         with st.spinner("Processing input data and executing model inference..."):
             try:
-                # Route payload directly into the pipeline function inside src/Predection.py
+                # Route payload directly into the pipeline function inside src/Prediction.py
                 predicted_price = pipeline_predict(raw_payload)
                 
                 st.success("🎉 Valuation computed successfully!")
@@ -133,4 +133,4 @@ with tab2:
                 st.error(
                     f"⚠️ An error occurred during inference pipeline execution.\n"
                     f"Please verify your saved model assets. Details: {str(e)}"
-                )
+)
