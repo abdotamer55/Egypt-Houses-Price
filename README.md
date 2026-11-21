@@ -4,6 +4,22 @@ A Python project combining Egyptian property-data analysis, regression modeling,
 
 [Explore the notebook](notebooks/eda_improved.ipynb) · [Open the Power BI file](dashboard/Dashboard%20project.pbix) · [Application source](App.py)
 
+## App Screenshots
+
+Real captures from the running Streamlit app (`streamlit run App.py`):
+
+**Project Overview tab**
+
+![Egypt Houses Price app - project overview](screenshots/egypt_app_overview.png)
+
+**Machine Learning Predictor tab**
+
+![Egypt Houses Price app - prediction form](screenshots/egypt_app_prediction_form.png)
+
+**Prediction flow with a real valuation result**
+
+![Egypt Houses Price app - prediction result](screenshots/egypt_app_prediction_result.png)
+
 ## Problem Statement
 
 Property prices vary with location, size, property type and other listing attributes. This project explores those relationships and builds a regression workflow for estimating prices from the available features.
