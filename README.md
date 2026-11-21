@@ -1,58 +1,71 @@
-An end-to-end Machine Learning web application designed to predict residential property prices in Egypt. The project processes raw real estate data through a robust data pipeline—encompassing rigorous cleaning, advanced feature engineering, target encoding to prevent data leakage, and feature importance selection—before serving predictions via an intuitive Streamlit multi-page interface.
+# Egypt House Price Prediction
 
----
+A Python project combining Egyptian property-data analysis, regression modeling, a Streamlit prediction interface and a Power BI report.
 
-## 🚀 Features & Architecture
+[Explore the notebook](notebooks/eda_improved.ipynb) · [Open the Power BI file](dashboard/Dashboard%20project.pbix) · [Application source](App.py)
 
-The project is structured into a modular, production-ready pipeline split into distinct operational layers:
+## Problem Statement
 
-1. **Data Cleaning (`data_cleaning.py`)**: Outlier rejection, duplicate filtering, and structural numeric coercion.
-2. **Feature Engineering (`featuer_engineering.py`)**: Construction of non-linear interaction features and domain-specific ratios.
-3. **Feature Selection & Encoding (`featuer_selection.py`)**: Safe Target Encoding split mechanics to prevent data leakage and Random Forest feature importance filtering.
-4. **Model Training & Evaluation (`Model.py`)**: Benchmarking multiple regression algorithms (Ridge, Decision Trees, Random Forest, LightGBM, XGBoost).
-5. **Prediction Pipeline (`Predection.py`)**: A backend routing script that passes raw web user input safely through the saved preprocessing assets.
-6. **Multi-page UI Application (`App.py`)**: An elegant interactive client interface built using Streamlit.
+Property prices vary with location, size, property type and other listing attributes. This project explores those relationships and builds a regression workflow for estimating prices from the available features.
 
----
+## Methodology
 
-## 📊 Detailed Pipeline Breakdown
+1. **Clean the source data:** standardize numeric fields, handle missing values and trim extreme values.
+2. **Engineer features:** create room totals, area ratios, interactions and indicators for listing attributes.
+3. **Encode and select:** split the data, apply out-of-fold target encoding on the training partition and use feature importance for selection.
+4. **Compare regressors:** the training code includes Ridge, decision-tree, random-forest, LightGBM and XGBoost models, evaluated with regression metrics.
+5. **Serve predictions:** load the saved model, selected features and encoding assets through the Streamlit interface.
+6. **Explore visually:** use the notebook and included Power BI report for further inspection.
 
-### 1. Data Cleaning & Outlier Rejection
-* **Handling Missing Values**: Drops missing target instances (`Price`) and standardizes continuous attributes via median statistical imputation.
-* **Percentile-Based Trimming**: Extreme luxury properties or pricing anomalies are cut dynamically using defensive percentile filters (Lower: 0.5%, Upper: 99%) across Price, Area, Bedrooms, and Bathrooms to stabilize gradients.
+The report contains Dashboard, Overview and Prediction pages, alongside navigation and tooltip pages. No report screenshot is included here because the repository did not contain a verified report capture.
 
-### 2. Advanced Feature Engineering
-To extract maximum predictive power from the real estate attributes, several engineering steps were implemented:
-* **Ratios & Proportions**: Computed structural metrics such as `Total_Rooms`, `Area_per_Room`, `Area_per_Bedroom`, and `Bath_to_Bed_Ratio`.
-* **Interaction Features**: Captured multi-dimensional effects like `Bed_x_Bath` and `Area_x_Beds`.
-* **Binary Status Mapping**: Encoded high-signal textual states (`Furnished`, `Delivery_Date`, `Payment_Option`, `Delivery_Term`) into binary indicators (`Is_Furnished`, `Is_Ready`, `Is_Cash`, etc.).
-* **Level Harmonization**: Built a custom text parser to harmonize floor descriptions (e.g., mapping "Ground" to `0` and "10+" to `10`).
+## Insights
 
-### 3. Leakage-Free Target Encoding & Selection
-* **Target Transformation**: The target variable `Price` is heavily skewed, so a logarithmic transformation ($Log\_Price = \ln(Price + 1)$) is applied to enforce normality.
-* **Leakage Avoidance**: Out-of-fold categorical targets (`City`, `Type`, `Compound`, and interaction groups like `City_Type`) are mapped to their respective target means calculated *strictly* from the training partition.
-* **Feature Importance Threshold**: A baseline Random Forest Regressor fits the encoded features. Features failing to meet an importance threshold of `0.003` (0.3% variance explanation) are safely pruned.
+The committed cleaned CSV contains **25,111 rows and 12 columns**. Descriptive statistics computed from that file:
 
-### 4. Model Benchmarking & Deployment
-The final pipeline benchmarks multiple machine learning architectures using $R^2$ Score, Mean Absolute Error (MAE), and Root Mean Squared Error (RMSE). Continuous evaluation ensures that the model with the highest generalization capability is saved to disk (`egypt_houses_best_model.pkl`).
+| Field | Median | Mean |
+| --- | ---: | ---: |
+| Price, in dataset units | 2,750,000 | 4,379,580.71 |
+| Area, in dataset units | 178 | 226.30 |
 
----
+The mean price is above the median, consistent with a right-skewed distribution. The training code uses a log-transformed price target. These figures describe the committed cleaned sample, not current Egyptian market prices or independently verified valuations.
 
-## 📁 Project Structure
+## Business Recommendations
 
-```text
-Egypt-Houses-Price/
-├── App.py                  # The main entry point for the Streamlit application (Home Page)
-├── README.md               # Project documentation and architecture overview
-├── data/                   # Directory containing raw historical real estate datasets
-│   └── Egypt_Houses_Price.csv
-├── models/                 # Serialized machine learning models and encoding assets
-│   ├── egypt_houses_best_model.pkl
-│   ├── egypt_houses_feature_names.pkl
-│   └── target_encoding_assets.pkl
-└── src/                    # Core source code for the data pipeline and machine learning layers
-    ├── data_cleaning.py     # Initial preprocessing, missing value imputation, and outlier filtering
-    ├── Featuer_engineering.py  # Production of structural interaction terms and business metrics
-    ├── Featuer_selection.py    # Target encoding implementation and Random Forest feature pruning
-    ├── Model.py             # Model benchmarking suite, evaluation metrics, and export logic
-    └── Predection.py        # Centralized production inference pipeline for live predictions
+- Compare properties within the same location and type before interpreting a price difference.
+- Use estimates as an exploratory reference, not a formal valuation.
+- Validate on newer listings and a separate holdout before using predictions for pricing decisions.
+- Review how trimming affects expensive or unusual properties before applying the model to those cases.
+
+These are analytical recommendations, not evidence of achieved financial returns.
+
+## Run Locally
+
+```bash
+git clone https://github.com/abdotamer55/Egypt-Houses-Price.git
+cd Egypt-Houses-Price
+pip install -r requirements.txt
+streamlit run App.py
+```
+
+Keep the files in `models/` together. Only load serialized model files from sources you trust.
+
+## Repository Guide
+
+| Path | Purpose |
+| --- | --- |
+| `data/` | Original and cleaned property CSV files |
+| `notebooks/eda_improved.ipynb` | Exploratory analysis |
+| `src/data_cleaning.py` | Data cleaning and filtering |
+| `src/Feature_engineering.py` | Derived features |
+| `src/Feature_selection.py` | Target encoding and feature selection |
+| `src/Model.py` | Model comparison and artifact export |
+| `src/Prediction.py` | Prediction pipeline |
+| `models/` | Committed model and preprocessing artifacts |
+| `dashboard/` | Power BI report |
+
+The old misspelled module paths remain as small compatibility wrappers so earlier imports and file links still work. New code uses the corrected filenames.
+
+## Limitations and Reproducibility
+
+This documentation does not claim a new model score or a production deployment. Training modules contain top-level processing, so importing them may perform data preparation. The training script writes artifacts to its working directory; place regenerated artifacts in `models/` before running the app. A full training and application regression test is separate from this documentation and filename cleanup.
